@@ -1,4 +1,4 @@
-Websocket server for IOT Simulator Client and Unreal Engine Simulator Client
+Websocket server for IOT Simulator Client and Unreal Engine HMI
 
 To run deno use
 

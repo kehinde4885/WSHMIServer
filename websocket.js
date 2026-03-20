@@ -11,6 +11,8 @@ function handler(request) {
   }
 
   // Upgrade to WebSocket request
+  //this means each client has a seperate
+  //websocket connection to this SERVER
   const { socket, response } = Deno.upgradeWebSocket(request);
   //Increases the variable using to track
   //number of clients
@@ -26,17 +28,18 @@ function handler(request) {
   // Set WebSocket events Callbacks
   socket.onopen = () => {
     console.log("WebSocket connection OPEN");
-    socket.send(
-      JSON.stringify({
-        type: "welcome",
-        clientId,
-        message: "send {role: 'unreal'} or {role:'simulator'}",
-      })
-    );
+    // socket.send(
+    //   JSON.stringify({
+    //     type: "welcome",
+    //     clientId,
+    //     message: "send {role: 'unreal'} or {role:'simulator'}",
+    //   })
+    // );
   };
 
   //Received message from client
   socket.onmessage = (event) => {
+    
     let data;
 
     try {
@@ -50,6 +53,7 @@ function handler(request) {
     if (data.role === "unreal" || data.role === "simulator") {
       clients.get(clientId).role = data.role;
       console.log(`Client ${clientId} set role: ${data.role}`);
+      return
     }
 
     //ROUTING LOGIC
@@ -93,3 +97,4 @@ function handler(request) {
 }
 
 Deno.serve({ port: 80, handler });
+
